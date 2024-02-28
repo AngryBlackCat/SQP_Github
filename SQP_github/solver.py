@@ -9,6 +9,7 @@ import numpy as np
 from problem import *
 import matplotlib.pyplot as plt
 
+#modifica
 np.random.seed(1766526)
 
 class Solver:
