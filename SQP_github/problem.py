@@ -19,7 +19,7 @@ def original_problem():
 
     A= np.array([[1.0, 1.0],
                 [-1.0, 1.0]])
-    b = np.matrix([1.0, 0.5]).reshape(2,1)
+    b = np.matrix([1.0, 0.75]).reshape(2,1)
     return c, Q, A, b
 
 def generate_sample(n_points = 10):

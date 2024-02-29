@@ -9,7 +9,6 @@ import numpy as np
 from problem import *
 import matplotlib.pyplot as plt
 
-#modifica
 np.random.seed(1766526)
 
 class Solver:
@@ -22,6 +21,7 @@ class Solver:
         self.sample = None
         self.active_constraints = 0
         self.index = None
+        self.optimal_solution = None
 
     def plot_domain(self, solution, point_index = None):
         fig, ax = plt.subplots(1)
@@ -51,7 +51,7 @@ class Solver:
         ax.plot(x0, cons_list[1].A1, color="blue", linestyle="--")
 
         #fill domain
-        #ax.fill_between(x0, cons_list[0].A1)
+        ax.fill_between(x0, np.minimum(cons_list[0].A1, cons_list[1].A1))
         if point_index is None:
             ax.set_title("Domain // original problem")
         else:
@@ -130,6 +130,7 @@ class Solver:
                 if self.sample is None:
                     for var in opt_model.getVars():
                         var_list.append(var.X)
+                    self.optimal_solution = var_list
                 else:
                     for i, var in enumerate(opt_model.getVars()):
                         var_list.append(var.X + self.sample.reshape(-1)[i])
