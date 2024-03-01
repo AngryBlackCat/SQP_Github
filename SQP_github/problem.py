@@ -13,13 +13,13 @@ matrix = np.array(list)
 
 def original_problem():
 
-    c = np.array([-9.0, -2.0]).reshape(2,1)
-    Q = np.array([[9.0, -2.0],
-                 [-1.0, 9.0]])
+    c = np.array([-5.0, -1.0]).reshape(2,1)
+    Q = np.array([[4.0, 2.0],
+                 [-1.0, 2.0]])
 
-    A= np.array([[1.0, 1.0],
-                [-1.0, 1.0]])
-    b = np.matrix([1.0, 0.75]).reshape(2,1)
+    A= np.array([[3.0, 0.75],
+                [-0.5, 1.0]])
+    b = np.matrix([2.5, 0.6]).reshape(2,1)
     return c, Q, A, b
 
 def generate_sample(n_points = 10):

@@ -51,7 +51,7 @@ class Solver:
         ax.plot(x0, cons_list[1].A1, color="blue", linestyle="--")
 
         #fill domain
-        ax.fill_between(x0, np.minimum(cons_list[0].A1, cons_list[1].A1))
+        ax.fill_between(x0, np.minimum(np.minimum(cons_list[0].A1, cons_list[1].A1), 1.0))
         if point_index is None:
             ax.set_title("Domain // original problem")
         else:

@@ -4,7 +4,7 @@ import seaborn as sns
 import pandas as pd
 from solver import Solver
 
-def heatmap(matrix, OP_active_constraint, solution = None):
+def heatmap(matrix, solution = None):
     array= np.array(matrix)
     dimension = int(np.sqrt(len(matrix)))
     heatmap_matrix = []
@@ -16,7 +16,6 @@ def heatmap(matrix, OP_active_constraint, solution = None):
             i = i+1
         heatmap_matrix.append(row)
 
-    heatmap_matrix = (np.array(heatmap_matrix) == OP_active_constraint)*1
     heatmap_matrix = np.flip(heatmap_matrix, axis= 0) #required since the points are reversed row-wise
 
     #plot heatmap
@@ -31,7 +30,6 @@ def heatmap(matrix, OP_active_constraint, solution = None):
     if solution is not None:
         ax.plot([solution[0]], [dimension - solution[1]], marker="o", markersize=10,
                 markeredgecolor="red", markerfacecolor="green")
-
 
     plt.show()
 
