@@ -13,17 +13,30 @@ np.random.seed(1766526)
 
 class Solver:
     def __init__(self, c, Q, A, b):
+
+        #original problem parameters
         self.c = c
         self.Q = Q
         self.A = A
         self.b = b
+
+        # used in the subproblems
         self.I = np.eye(len(Q))
+
+        #initilize parameters
         self.sample = None
         self.active_constraints = 0
         self.index = None
         self.optimal_solution = None
 
     def plot_domain(self, solution, point_index = None):
+        """
+        Plot the domain, the constraints and the optimal solution
+
+        :param solution: solution achieved
+        :param point_index: x sample index to associate with solution
+        :return:
+        """
         fig, ax = plt.subplots(1)
 
         # [0,1] x [0,1] box
@@ -57,6 +70,7 @@ class Solver:
         else:
             ax.set_title(f"Domain // {point_index}-th point")
 
+        #set domain labels
         ax.set_xlabel("$x_{1}$")
         ax.set_ylabel("$x_{2}$")
         ax.set_xlim([0.0, 1.1])
@@ -64,6 +78,14 @@ class Solver:
         fig.show()
 
     def build_model(self, generated_sample = None, index = None):
+
+        """
+        We build the original quadratic problem
+
+        :param generated_sample: x sample given
+        :param index: x sample index for plot
+        :return: optimization model
+        """
 
         if generated_sample is None:
             opt_model = Model(name='quadratic programming problem')
@@ -85,6 +107,8 @@ class Solver:
             opt_model.addConstrs(x[i] -1 <= 0 for i in range(x.shape[0]))
             opt_model.update()
 
+
+        #we build the subproblem, given a specific sample
         else:
             opt_model = Model(name='quadratic programming problem')
             self.index = index
@@ -92,6 +116,7 @@ class Solver:
             #introduce generated sample
             self.sample = generated_sample.reshape(generated_sample.shape[0], 1)
             x= self.sample
+
             # variables
             d = opt_model.addMVar((2, 1), vtype=GRB.CONTINUOUS, name='d')
             opt_model.update()
@@ -114,17 +139,24 @@ class Solver:
         return opt_model
 
     def solve(self, opt_model, plot_results=False):
+        """
+        We solve the given problem
+        :param opt_model: optimization model to be solved
+        :param plot_results: True if we want to plot the results, False otherwise
+        :return:
+        """
         opt_model.optimize()
-
+        #we compute the number of active constraints at solution
+        #problem is solved
         if opt_model.SolCount >= 1:
             active_constraints = 0
             for c in opt_model.getConstrs():
                 LHS = opt_model.getRow(c).getValue()
                 if np.linalg.norm(LHS - c.RHS) < 1e-4:
                     active_constraints = active_constraints + 1
-
             self.active_constraints = active_constraints
 
+            #plot results if needed
             if plot_results is True:
                 var_list = []
                 if self.sample is None:
@@ -134,8 +166,9 @@ class Solver:
                 else:
                     for i, var in enumerate(opt_model.getVars()):
                         var_list.append(var.X + self.sample.reshape(-1)[i])
-
                 self.plot_domain(var_list, point_index= self.index)
+
+        #problem is not solved
         else:
             self.active_constraints = 100000
             #print("No feasible solution available")
