@@ -39,6 +39,12 @@ def deterministic(n_points):
     #we start solving the problem for each point
     c, Q, A, b = original_problem()
     problem = Solver(c, Q, A, b)
+    #print(optimal_solution)
+    #new_model = problem.build_model(generated_sample=np.array(optimal_solution), index=0)
+    #problem.solve(new_model, plot_results=True)
+    #print(f"active_constraints_{0}-th point:", problem.active_constraints)
+    #AC_matrix.append((problem.active_constraints == OP_active_constraints) * 1)
+
     for i in range(len(samples)):
         new_model = problem.build_model(samples[i], index=i)
         problem.solve(new_model, plot_results=False)

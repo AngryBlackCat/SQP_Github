@@ -8,6 +8,9 @@ from det_setting import deterministic, stochastic
         Problem: problem.py
         Heatmap generator: heatmap.py
         Settings (deterministic, stochastic): det_setting.py
+        
+        Test different Qs to find a situation between Identity matrix and optimal solution
+        Be careful  because the subproblem is modified!
 '''
 
 # Press the green button in the gutter to run the script.
@@ -18,7 +21,7 @@ if __name__ == '__main__':
 
     n_replicas = 10
     white_noise_variance = 4
-    stochastic(n_points, n_replicas, variance=white_noise_variance)
+    #stochastic(n_points, n_replicas, variance=white_noise_variance)
 
 
 

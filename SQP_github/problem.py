@@ -1,15 +1,27 @@
 import torch
 import numpy as np
 
+def original_problem():
+    """
+    Defines the problem parameter and then it creates a quadratic problem of the form
 
-def original_problem(): #problem settings
+    min 1/2x^TQx + c^Tx
+    s.t. Ax <= b
+
+    :return:
+    """
     c = np.array([-5.0, -1.0]).reshape(2,1)
-    Q = np.array([[4.0, 2.0],
-                 [-1.0, 2.0]])
+    Q = np.array([[9.0, -3.0],
+                 [-3.0, 9.0]])
 
-    A= np.array([[3.0, 0.75],
-                [-0.5, 1.0]])
-    b = np.matrix([2.0, 0.7]).reshape(2,1)
+    #Q = np.array([[1.0, 0.0],
+    #             [0.0, 1.0]])
+
+    A= np.array([[3.0, 1.0],
+                [-0.5, 1.0],
+                [0.0, 1.0]])
+    b = np.matrix([2.5, 0.7, 0.8])
+    b = b.reshape(b.size,1)
     return c, Q, A, b
 
 def generate_sample(n_points = 10):

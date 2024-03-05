@@ -60,11 +60,15 @@ class Solver:
         for k in range(len(self.b)):
             right_hand_side = (self.b[k] - self.A[k, 0] * x0)/self.A[k, 1]
             cons_list.append(right_hand_side)
-        ax.plot(x0, cons_list[0].A1, color = "blue", linestyle= "--")
-        ax.plot(x0, cons_list[1].A1, color="blue", linestyle="--")
+
+        tuple_cons=[]
+        for cons in cons_list:
+            ax.plot(x0, cons.A1, color="blue", linestyle="--")
+            tuple_cons.append(cons.A1)
 
         #fill domain
-        ax.fill_between(x0, np.minimum(np.minimum(cons_list[0].A1, cons_list[1].A1), 1.0))
+        tuple_cons = np.column_stack(tuple(tuple_cons))
+        ax.fill_between(x0, np.minimum(np.min(tuple_cons, axis=1), 1.0))
         if point_index is None:
             ax.set_title("Domain // original problem")
         else:
@@ -107,7 +111,6 @@ class Solver:
             opt_model.addConstrs(x[i] -1 <= 0 for i in range(x.shape[0]))
             opt_model.update()
 
-
         #we build the subproblem, given a specific sample
         else:
             opt_model = Model(name='quadratic programming problem')
@@ -118,21 +121,30 @@ class Solver:
             x= self.sample
 
             # variables
-            d = opt_model.addMVar((2, 1), vtype=GRB.CONTINUOUS, name='d')
+            d = opt_model.addMVar((2, 1), lb= -1000000000,
+                                  vtype=GRB.CONTINUOUS, name='d')
             opt_model.update()
-            new_x = x+d
+            #new_x = x+d
 
             # objective function (we use the identity matrix instead of Q)
-            z = [quicksum(new_x[i]*self.I[i]) for i in range(x.shape[0])]
-            new_xqx = quicksum([z[i] * new_x[i] for i in range(len(z))])
-            obj_fun = quicksum(self.c * new_x) + 0.5 * new_xqx
+            #z = [quicksum(new_x[i]*self.I[i]) for i in range(x.shape[0])]
+            #new_xqx = quicksum([z[i] * new_x[i] for i in range(len(z))])
+            #obj_fun = quicksum(self.c * new_x) + 0.5 * new_xqx
+            #opt_model.setObjective(obj_fun, GRB.MINIMIZE)
+
+            #new objective function
+            z= quicksum(d.transpose() @ self.I)
+            dqd = quicksum([z[i] * d[i] for i in range(d.shape[0])])
+            obj_fun = quicksum((self.c + self.Q @ x) * d) + 0.5 * dqd
             opt_model.setObjective(obj_fun, GRB.MINIMIZE)
 
             # constraints
-            left_side = self.A @ new_x
-            opt_model.addConstrs((left_side[i].sum() <= self.b[i] for i in range(left_side.shape[0])))
-            opt_model.addConstrs(new_x[i] >= 0 for i in range(x.shape[0]))
-            opt_model.addConstrs(new_x[i] <= 1 for i in range(x.shape[0]))
+            left_side = self.A @ d
+            right_side = self.A @ x
+            opt_model.addConstrs((left_side[i].sum() <= (self.b[i] - right_side[i])
+                                  for i in range(left_side.shape[0])))
+            opt_model.addConstrs(d[i] >= -x[i] for i in range(x.shape[0]))
+            opt_model.addConstrs(d[i] <= 1-x[i] for i in range(x.shape[0]))
             opt_model.update()
 
         opt_model.Params.LogToConsole = 0
@@ -146,6 +158,7 @@ class Solver:
         :return:
         """
         opt_model.optimize()
+
         #we compute the number of active constraints at solution
         #problem is solved
         if opt_model.SolCount >= 1:
@@ -163,9 +176,14 @@ class Solver:
                     for var in opt_model.getVars():
                         var_list.append(var.X)
                     self.optimal_solution = var_list
+                    #print("optimal_solution:", self.optimal_solution)
                 else:
                     for i, var in enumerate(opt_model.getVars()):
+                        print("d:", var.X)
+                        print("current x_k:", self.sample.reshape(-1)[i])
                         var_list.append(var.X + self.sample.reshape(-1)[i])
+                        print("sum:", var.X + self.sample.reshape(-1)[i])
+#                        print("----------------------------------------")
                 self.plot_domain(var_list, point_index= self.index)
 
         #problem is not solved
@@ -173,6 +191,7 @@ class Solver:
             self.active_constraints = 100000
             #print("No feasible solution available")
 
+        opt_model.reset()
         return
 
 
