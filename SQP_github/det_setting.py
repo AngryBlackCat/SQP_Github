@@ -1,6 +1,5 @@
 from heatmap import *
 from solver import *
-import time
 
 def optimal_solution_AC():
 

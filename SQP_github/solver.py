@@ -124,13 +124,7 @@ class Solver:
             d = opt_model.addMVar((2, 1), lb= -1000000000,
                                   vtype=GRB.CONTINUOUS, name='d')
             opt_model.update()
-            #new_x = x+d
 
-            # objective function (we use the identity matrix instead of Q)
-            #z = [quicksum(new_x[i]*self.I[i]) for i in range(x.shape[0])]
-            #new_xqx = quicksum([z[i] * new_x[i] for i in range(len(z))])
-            #obj_fun = quicksum(self.c * new_x) + 0.5 * new_xqx
-            #opt_model.setObjective(obj_fun, GRB.MINIMIZE)
 
             #new objective function
             z= quicksum(d.transpose() @ self.I)
@@ -183,7 +177,7 @@ class Solver:
                         print("current x_k:", self.sample.reshape(-1)[i])
                         var_list.append(var.X + self.sample.reshape(-1)[i])
                         print("sum:", var.X + self.sample.reshape(-1)[i])
-#                        print("----------------------------------------")
+#                       print("----------------------------------------")
                 self.plot_domain(var_list, point_index= self.index)
 
         #problem is not solved

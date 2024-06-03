@@ -21,12 +21,7 @@ if __name__ == '__main__':
 
     n_replicas = 10
     white_noise_variance = 4
-    #stochastic(n_points, n_replicas, variance=white_noise_variance)
-
-
-
-
-
+    stochastic(n_points, n_replicas, variance=white_noise_variance)
 
 
 
