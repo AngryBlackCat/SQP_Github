@@ -1,7 +1,7 @@
 # The role of active constraints on the convergence of stochastic uncostrained algorithms
 ### Python (Skip if Python3 (>=3.12) is already installed) and a Gurobi license are required
 
-The code calls the Gurobi solver and creates a bi-dimensional Quadratic Programming problem within a [0,1]x[0,1] box. 
+The code calls the Gurobi solver and creates a bi-dimensional Quadratic Programming problem within a [0,1] x [0,1] box. 
 The objective function and the constraints of the problem can be manually set by the user in 'problem.py'.
 
 First, the solver finds the optimal solution in the entire feasible set.
