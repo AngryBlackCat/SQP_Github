@@ -16,12 +16,12 @@ from det_setting import deterministic, stochastic
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    n_points = 8
+    n_points = 4
     deterministic(n_points)
 
-    n_replicas = 10
-    white_noise_variance = 4
-    stochastic(n_points, n_replicas, variance=white_noise_variance)
+    # n_replicas = 10
+    # white_noise_variance = 4
+    # stochastic(n_points, n_replicas, variance=white_noise_variance)
 
 
 

@@ -11,7 +11,9 @@ def optimal_solution_AC():
 
     c, Q, A, b = original_problem()
     problem = Solver(c, Q, A, b)
+
     model = problem.build_model()
+
     problem.solve(model, plot_results=True)
     optimal_solution = problem.optimal_solution
     OP_active_constraints = problem.active_constraints
