@@ -8,7 +8,7 @@ def original_problem():
     min 1/2x^TQx + c^Tx
     s.t. Ax <= b
 
-    :return:
+    :return: the parameters required to build the quadratic problem
     """
     c = np.array([-5.0, -1.0]).reshape(2, 1)
     Q = np.array([[9.0, -3.0],
