@@ -28,7 +28,7 @@ of active constraints at the optimal solution), 0 otherwise.
 The second experiment replicates the first one, but it involves a Quadratic Programming problem with a stochastic parameter. 
 
 A white noise is added to the "c" parameter. The number of realizations can be manually defined by the user.
-In each sub-square of the final meshgrid, the code prints the average of the points which correctly predict the active constraint.
+In each sub-square of the final meshgrid, the code prints the average of the points which correctly predict the number of active constraint.
 
 If you need to create a new Python environment and install Python 3.12 with conda, you can use the following command:
 ```
