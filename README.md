@@ -22,14 +22,13 @@ Therefore, we are exploiting the connection:
 sub-square -> starting point -> optimal direction -> endpoint.
 
 Finally, the meshgrid of the [0,1] x [0,1] discretized box is plotted.
-Each sub-square is labeled 1 if the number of active constraints of the associated endpoint is compared with the number 
-of active constraints at the optimal solution.
+Each sub-square is labeled 1 if the number of active constraints is correctly computed (i.e. the number of active constraints of the associated endpoint is equal to the number 
+of active constraints at the optimal solution), 0 otherwise.
 
 The second experiment replicates the first one, but it involves a Quadratic Programming problem with a stochastic parameter. 
 
 A white noise is added to the "c" parameter. The number of realizations can be manually defined by the user.
-In each sub-square of the final meshgrid, the ratio between the number of realizations in which the number of active constraints in the endpoint
-is equal to the number of active constraints at the optimal solution and the total number of realizations, is printed. 
+In each sub-square of the final meshgrid, the code prints the ratio between the number of realizations in which the number of active constraints is correctly computed and the total number of realizations.
 
 If you need to create a new Python environment and install Python 3.12 with conda, you can use the following command:
 ```
