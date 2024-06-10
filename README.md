@@ -1,5 +1,5 @@
 # The role of active constraints on the convergence of stochastic uncostrained algorithms
-###Please read the "Problem settings" PDF file before this ReadMe.
+### Please read the "Problem settings" PDF file before this ReadMe.
 
 Python (Skip if Python3 (>=3.12) is already installed) and a Gurobi license are required.
 
